@@ -34,7 +34,6 @@ int main(int argc, char* argv[]) {
     int pair_num = (argc-1)/2;
     ARP_Table* Table = (ARP_Table*)malloc(sizeof(ARP_Table)*pair_num);
     for(int i = 1; i <=pair_num; i++){
-        //Change InitTable
         Table[i-1].SENDER_IP = Str2A(argv[i*2]);
         Table[i-1].TARGET_IP = Str2A(argv[i*2+1]);
         Send(REQUEST, handle,ATTACKER_IP,ATTACKER_MAC,Table[i-1].SENDER_IP,Table[i-1].SENDER_MAC);    //Get Sender MAC
