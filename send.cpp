@@ -184,8 +184,8 @@ void Relay(pcap_t* handle, uint8_t* ATTACKER_MAC, ARP_Table* Table, int pair_num
 
     struct pcap_pkthdr* header;
     const u_char* data;
-
     struct timeval start, current;
+    InitKb();
     gettimeofday(&start, 0);
     while(1){
         int res = pcap_next_ex(handle, &header, &data);
