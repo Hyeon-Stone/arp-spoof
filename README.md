@@ -12,7 +12,7 @@ sample : arp-spoof wlan0 192.168.10.2 192.168.10.1 192.168.10.1 192.168.10.2
 ---
 ## Warning
 _**Please Don't press Cntrl+C!!**_<br>
-Press any Key on runing it will be send Revocer Packet and Process quit 
+Press any Key except Ctrl +C on runing it will be send Revocer Packet and Process quit 
 
 
 ---
