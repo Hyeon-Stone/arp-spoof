@@ -46,4 +46,5 @@ int main(int argc, char* argv[]) {
 
     printf("=======================================================================");
     pcap_close(handle);
+    free(Table);
 }

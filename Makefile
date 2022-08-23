@@ -11,7 +11,7 @@ kbctrl.o: kbctrl.h kbctrl.cpp
 send.o: ethhdr.h arphdr.h send.h send.cpp kbctrl.h
 
 arp-spoof: main.o arphdr.o ethhdr.o send.o kbctrl.o
-	$(LINK.cc) -w $^ $(LOADLIBES) $(LDLIBS) -o $@
+	$(LINK.cc)  $^ $(LOADLIBES) $(LDLIBS) -o $@
 	rm -f *.o
 clean:
 	rm -f arp-spoof *.o
